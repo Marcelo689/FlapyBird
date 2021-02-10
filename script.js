@@ -62,7 +62,24 @@ const planoDeFundo ={
     },
 };
 
-
+// mensagem de pronto
+const mensagem ={
+    sX:134,
+    sY:0,
+    w:174,
+    h:152,
+    x:(canvas.width / 2) - 174 / 2,
+    y:50,
+    desenha(){
+        contexto.drawImage(
+            sprites,
+            mensagem.sX,mensagem.sY,
+            mensagem.w,mensagem.h,
+            mensagem.x,mensagem.y,
+            mensagem.w,mensagem.h,
+        );
+    },
+};
 
 //passarinho
 const flappyBird ={
@@ -72,6 +89,12 @@ const flappyBird ={
     altura:24,
     x:10,
     y:50,
+    gravidade:0.25,
+    velocidade:0,
+    atualiza(){
+        flappyBird.velocidade = flappyBird.velocidade+flappyBird.gravidade;
+        flappyBird.y = flappyBird.y+flappyBird.velocidade;
+    },
     desenha(){
     contexto.drawImage(sprites,
     flappyBird.spriteX,flappyBird.spriteY,// sx, sy posiçoes do sprite
@@ -82,16 +105,54 @@ const flappyBird ={
     },
 };
 
+//Telas de jogo
 
+let telaAtiva ={};
+    function mudaTela(novaTela){
+        telaAtiva = novaTela;
+};
 
+const telas = {
+    inicio:{
+        desenha(){
+        planoDeFundo.desenha();
+        chao.desenha();
+        flappyBird.desenha();
+        mensagem.desenha();
+        },
+        click(){
+            mudaTela(telas.jogo);
+        },
+        atualiza(){
+
+        }
+    }
+};
+
+telas.jogo = {
+    desenha(){
+        planoDeFundo.desenha();
+        chao.desenha();
+        flappyBird.desenha();
+    },
+    atualiza(){
+    flappyBird.atualiza();    
+    }
+}
+
+//loop do jogo
 
 function loop(){
-    planoDeFundo.desenha();
-    chao.desenha();
-    flappyBird.desenha();
-    
-    
+    telaAtiva.desenha();
+    telaAtiva.atualiza();
     requestAnimationFrame(loop);
 }
 
+window.addEventListener('click',function(){
+    if(telaAtiva.click){
+        telaAtiva.click();
+    }
+})
+
+mudaTela(telas.inicio)
 loop();

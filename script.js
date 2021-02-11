@@ -6,6 +6,7 @@ const sprites = new Image();
 
 sprites.src ='./sprites.png';
 
+let frames =0;
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 
@@ -123,12 +124,13 @@ function criaFlappyBird(){
         atualizaFrame(){
             const intervaloFrame = 10;
             const passouIntervalo = frames % intervaloFrame === 0;
-        },
+        
         if(passouIntervalo){
             const baseIncrementa =1 ;
             const incremento= baseIncrementa + flappyBird.frameAtual;
             const baseRepetir = flappyBird.movimentos.length;
             flappyBird.frameAtual = incremento % baseRepetir;
+        }
         },
         desenha(){
             flappyBird.atualizaFrame();
